@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter for Deborah Faith 🌌</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: white;
+    background: linear-gradient(160deg, #020817, #071c43, #102e63);
+    overflow-x: hidden;
+}
+
+#sky {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 7px white;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: .2; transform: scale(.7); }
+    to { opacity: 1; transform: scale(1.5); }
+}
+
+.shooting-star {
+    position: absolute;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, white, transparent);
+    transform: rotate(-35deg);
+    animation: shoot 5s linear infinite;
+    opacity: 0;
+}
+
+@keyframes shoot {
+    0% {
+        transform: translate(0, 0) rotate(-35deg);
+        opacity: 0;
+    }
+    5% { opacity: 1; }
+    20% {
+        transform: translate(-350px, 220px) rotate(-35deg);
+        opacity: 0;
+    }
+    100% { opacity: 0; }
+}
+
+.screen {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.welcome-card {
+    width: min(480px, 100%);
+    padding: 42px 25px;
+    text-align: center;
+    border: 1px solid rgba(173,216,255,.3);
+    border-radius: 25px;
+    background: rgba(12,35,75,.72);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 50px rgba(48,120,220,.2);
+    animation: appear 1.2s ease;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(25px) scale(.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.moon {
+    font-size: 60px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    50% { transform: translateY(-10px); }
+}
+
+.welcome-card h1 {
+    font-size: clamp(25px, 6vw, 37px);
+    line-height: 1.3;
+    color: #d9ecff;
+    margin-bottom: 14px;
+}
+
+.welcome-card p {
+    color: #b9d5f5;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.question-card {
+    width: min(480px, 100%);
+    padding: 38px 25px;
+    text-align: center;
+    border: 1px solid rgba(173,216,255,.3);
+    border-radius: 25px;
+    background: rgba(12,35,75,.8);
+    box-shadow: 0 0 50px rgba(48,120,220,.2);
+    animation: appear 1s ease;
+}
+
+.question-card h2 {
+    font-size: 25px;
+    color: #d9ecff;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.clue {
+    font-style: italic;
+    color: #91caff;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #6da9e9;
+    outline: none;
+    background: rgba(255,255,255,.1);
+    color: white;
+    font-size: 17px;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+input::placeholder {
+    color: #a6c4e7;
+}
+
+input:focus {
+    box-shadow: 0 0 15px rgba(100,170,255,.4);
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #08234b;
+    background: linear-gradient(135deg, #e2f2ff, #8ec9ff);
+    box-shadow: 0 5px 20px rgba(80,150,255,.2);
+    transition: .3s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(100,170,255,.4);
+}
+
+button:active {
+    transform: scale(.96);
+}
+
+#error {
+    color: #ffb7c5;
+    margin-top: 16px;
+    min-height: 22px;
+    font-size: 14px;
+}
+
+.envelope-card {
+    text-align: center;
+    animation: appear 1s ease;
+}
+
+.envelope-card h2 {
+    color: #d9ecff;
+    margin-bottom: 15px;
+    font-size: 27px;
+}
+
+.envelope {
+    position: relative;
+    width: 230px;
+    height: 155px;
+    margin: 45px auto;
+    background: #76b8ed;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 15px 45px rgba(0,0,0,.35);
+    transition: transform .3s;
+}
+
+.envelope:hover {
+    transform: translateY(-8px);
+}
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 115px solid transparent;
+    border-right: 115px solid transparent;
+    border-top: 95px solid #a9d8ff;
+    transform-origin: top;
+    transition: transform .7s;
+    z-index: 3;
+}
+
+.envelope.opened::before {
+    transform: rotateX(180deg);
+}
+
+.envelope::after {
+    content: "✉";
+    position: absolute;
+    top: 48px;
+    left: 0;
+    width: 100%;
+    font-size: 45px;
+    color: #17477b;
+}
+
+.envelope-heart {
+    position: absolute;
+    z-index: 4;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+}
+
+.envelope-hint {
+    color: #b9d5f5;
+    font-style: italic;
+}
+
+#letterScreen {
+    padding: 50px 15px;
+    align-items: flex-start;
+}
+
+.letter-container {
+    width: min(850px, 100%);
+    animation: letterAppear 1.5s ease;
+}
+
+@keyframes letterAppear {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.letter-heading {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.letter-heading h1 {
+    color: #d9ecff;
+    font-size: clamp(27px, 6vw, 40px);
+    margin-bottom: 10px;
+}
+
+.letter-heading p {
+    color: #a9c9ed;
+}
+
+.paper {
+    position: relative;
+    overflow: hidden;
+    background: #f5f8ff;
+    color: #233c5e;
+    padding: clamp(25px, 6vw, 55px);
+    border-radius: 7px;
+    border-top: 7px solid #69a9e8;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+.paper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        transparent,
+        transparent 31px,
+        rgba(74,139,205,.09) 32px
+    );
+}
+
+.paper-decoration {
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    font-size: 32px;
+    opacity: .35;
+}
+
+#message {
+    position: relative;
+    z-index: 1;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 16px;
+    line-height: 2;
+    min-height: 250px;
+}
+
+.cursor {
+    display: inline-block;
+    width: 2px;
+    height: 18px;
+    background: #347ec0;
+    margin-left: 2px;
+    animation: blink .7s infinite;
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.signature {
+    position: relative;
+    z-index: 1;
+    text-align: right;
+    color: #164d86;
+    font-weight: bold;
+    margin-top: 35px;
+    line-height: 1.8;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease;
+}
+
+.signature.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.ps {
+    position: relative;
+    z-index: 1;
+}
+
+.footer {
+    text-align: center;
+    color: #b9d5f5;
+    margin-top: 25px;
+    font-size: 13px;
+}
+
+.music-player {
+    position: fixed;
+    z-index: 10;
+    bottom: 18px;
+    right: 18px;
+    background: rgba(14,43,83,.92);
+    border: 1px solid rgba(180,220,255,.35);
+    border-radius: 30px;
+    padding: 9px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+}
+
+.music-player button {
+    padding: 8px 13px;
+    font-size: 13px;
+}
+
+.music-player span {
+    font-size: 12px;
+    color: #d9ecff;
+}
+
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 20;
+    animation: sparkle 1.2s ease forwards;
+}
+
+@keyframes sparkle {
+    from {
+        opacity: 1;
+        transform: translate(-50%,-50%) scale(.5);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%,-120px) scale(1.8) rotate(30deg);
+    }
+}
+
+@media(max-width:600px) {
+    #message {
+        font-size: 15px;
+        line-height: 1.9;
+    }
+
+    .paper {
+        padding: 27px 20px;
+    }
+
+    .music-player {
+        bottom: 10px;
+        right: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="sky"></div>
+
+<section id="welcomeScreen" class="screen">
+    <div class="welcome-card">
+        <div class="moon">🌙</div>
+        <h1>A Little Something Under the Stars</h1>
+        <p>
+            Somewhere beneath this beautiful night sky,
+            there's a little surprise waiting for you.
+        </p>
+        <button onclick="showQuestion()">Continue ✨</button>
+    </div>
+</section>
+
+<section id="questionScreen" class="screen hidden">
+    <div class="question-card">
+        <div class="moon">🍬</div>
+        <h2>Anong candy ang favorite ko dahil sayo?</h2>
+        <p class="clue">Clue: "Kamukha mo 'to!"</p>
+
+        <input
+            id="answer"
+            type="text"
+            placeholder="Your answer..."
+            autocomplete="off"
+        >
+
+        <button onclick="checkAnswer()">Submit 💙</button>
+        <p id="error"></p>
+    </div>
+</section>
+
+<section id="envelopeScreen" class="screen hidden">
+    <div class="envelope-card">
+        <h2>Correct! HAHAHAHA 💙</h2>
+        <p>You remembered! Here's something for you.</p>
+
+        <div class="envelope" id="envelope" onclick="openEnvelope()">
+            <div class="envelope-heart">💙</div>
+        </div>
+
+        <p class="envelope-hint">Tap the envelope to open your letter.</p>
+    </div>
+</section>
+
+<section id="letterScreen" class="screen hidden">
+    <div class="letter-container">
+        <div class="letter-heading">
+            <h1>Happy Birthday, Deborah Faith! 🌌</h1>
+            <p>A little message written under the stars</p>
+        </div>
+
+        <div class="paper">
+            <div class="paper-decoration">🌙 ✨</div>
+            <div id="message"></div>
+            <div class="signature" id="signatureBlock">
+                Your very makulit na "kuya"(?)<br>
+                Christian
+            </div>
+        </div>
+
+        <div class="footer">
+            Somewhere in Bataan, someone is cheering for you. 💙
+        </div>
+    </div>
+</section>
+
+<audio id="backgroundMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div id="musicPlayer" class="music-player hidden">
+    <span>🎵 A little song for you</span>
+    <button onclick="toggleMusic()" id="musicButton">Pause</button>
+</div>
+
+<script>
+const sky = document.getElementById("sky");
+
+for (let i = 0; i < 130; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 100 + "%";
+    star.style.animationDelay = Math.random() * 3 + "s";
+    star.style.animationDuration = (1 + Math.random() * 3) + "s";
+
+    const size = Math.random() * 2 + 1;
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+
+    sky.appendChild(star);
+}
+
+for (let i = 0; i < 4; i++) {
+    const shooting = document.createElement("div");
+    shooting.className = "shooting-star";
+    shooting.style.left = (30 + Math.random() * 70) + "%";
+    shooting.style.top = (Math.random() * 60) + "%";
+    shooting.style.animationDelay = (i * 3 + 1) + "s";
+    sky.appendChild(shooting);
+}
+
+function changeScreen(current, next) {
+    document.getElementById(current).classList.add("hidden");
+    document.getElementById(next).classList.remove("hidden");
+}
+
+function showQuestion() {
+    changeScreen("welcomeScreen", "questionScreen");
+    setTimeout(() => document.getElementById("answer").focus(), 300);
+}
+
+function checkAnswer() {
+    const answer = document.getElementById("answer").value
+        .trim()
+        .toLowerCase();
+
+    const error = document.getElementById("error");
+
+    if (answer === "potchi") {
+        error.textContent = "";
+        changeScreen("questionScreen", "envelopeScreen");
+        starBurst();
+    } else {
+        error.textContent = "Hala, wrong answer! Try again. HAHAHA 💙";
+        document.getElementById("answer").value = "";
+    }
+}
+
+document.getElementById("answer").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") checkAnswer();
+});
+
+let letterStarted = false;
+
+async function openEnvelope() {
+    if (letterStarted) return;
+    letterStarted = true;
+
+    const envelope = document.getElementById("envelope");
+    envelope.classList.add("opened");
+
+    const music = document.getElementById("backgroundMusic");
+
+    try {
+        await music.play();
+        document.getElementById("musicPlayer").classList.remove("hidden");
+    } catch (error) {
+        document.getElementById("musicPlayer").classList.remove("hidden");
+        document.getElementById("musicButton").textContent = "Play";
+    }
+
+    setTimeout(() => {
+        document.getElementById("envelopeScreen").classList.add("hidden");
+        document.getElementById("letterScreen").classList.remove("hidden");
+
+        starBurst();
+        typeMessage();
+    }, 900);
+}
+
+function toggleMusic() {
+    const music = document.getElementById("backgroundMusic");
+    const button = document.getElementById("musicButton");
+
+    if (music.paused) {
+        music.play().then(() => {
+            button.textContent = "Pause";
+        }).catch(() => {
+            button.textContent = "Play";
+        });
+    } else {
+        music.pause();
+        button.textContent = "Play";
+    }
+}
+
+const message = `Dear Deborah Faith,
+
+Hello, it's been awhile since we talked to each other. How are you? I do hope you're doing well and fine out there. Kumusta yung choir practice nyo? Siguro nalalapit nadin yung competition nyo don, I wish you knew how excited I am just imagining you'd experience such immense pressure but at the same time that unexplainable joy to perform in front of many people. I do hope you're doing well din dyan sa school, at sana nman natuto ka na kay Jacob HAHAHAHAHAH. Well, di ko na din alam eh. Wala nakong alam sayo, all I know is that you'd do good and perform well kasi ikaw na yan ehh!! And I know na kayang kaya mo yan no matter how busy you are and how tight your schedule is. Well, I'll go straight to the point na.
+
+Happy Birthday madame potch dihbuhrah pepeyt hart!! HAHAHAHA kulit daming pangalan, happy 17th birthday. Even though di kita nakilala talaga in person at saglit lang na time tayo nagkakilala talaga at nagkaroon ng time to get to know each other eh I've seen how kind and pure your heart is. Even though it seems I don't know a lot about you anymore but all I know and what I'm sure is that I'd always be proud of you on whatever you'd achieve. I may not know those small wins of yours always neither be present in every awarding you've attended or will attend soon but I just want you to know that someone from Bataan always cheers for you and is excited to see you achieve all your goals. God knew all your efforts and labour, in due season you'd reap what you truly deserve. We may not see each other again nor talk to each other anymore but I just want you to know that I am forever grateful to meet such a kind and faithful soul. I do wish and pray you all the best Faith. Please continue on being a good daughter, student, friend, teacher, singer, script/play writer, theatre actor(?) and everything you are. You've got a bright future, I do hope that one day, I'd be able to see your name with CHRA, RPm, JD, Atty and many more. Malay mo, ikaw pala magiging attorney ko pag nakasakal ako one day eme. With all jokes aside, I'm so glad that our paths crossed with each other and met you. You're always included in my prayers Faith, and you'd always be the standard of mine. Thank you for being a part of my most meaningful days of my life! Please continue to give joy by wearing that smile that makes everyone smile too! Stay chubby cheeks! Bagay sayo yang siopao mo na cheeks HAHAHAHA. Once again, happy happy birthday Deborah Faith!! What I wanted you to always remember is what the bible says at
+
+James 1:5
+
+[5]If any of you lack wisdom, let him ask of God, that giveth to all men liberally, and upbraideth not; and it shall be given him.
+
+I know how hard it is for you to deal with all your problems especially when you're left with nothing but choices. And in everything you do, always put your trust in God and ask Him of His guidance. Alam ko madalas mapag overthink ka din at problemado that's why this is the verse that I wanted to share to you to remind you that God is always with us and all we have to do is to ask Him. Whenever you're troubled, just go and ask Him, He's just waiting for us to seek him.
+
+Once again, Happy Birthday.
+
+PS:
+
+Just wanted to greet you from a very unusual way, don't asked how many days I've prepared and did this, it's personal (eme). Isang "may bitaw" na message from your "may bitaw" na kaibigan/"kuya(?)".
+
+PPS:
+
+Favorite mo kasi yung song na ito, panay ito ninonote mo nun sa mess so eto nalang din nilagay ko AHAHAHAAHA.`;
+
+function typeMessage() {
+    const container = document.getElementById("message");
+    let index = 0;
+
+    const cursor = document.createElement("span");
+    cursor.className = "cursor";
+    container.appendChild(cursor);
+
+    function type() {
+        if (index >= message.length) {
+            cursor.remove();
+            const signature = document.getElementById("signatureBlock");
+            if (signature) {
+                signature.classList.add("visible");
+            }
+            return;
+        }
+
+        const character = message.charAt(index);
+
+        cursor.insertAdjacentText("beforebegin", character);
+        index++;
+
+        if (index % 12 === 0) {
+            const rect = cursor.getBoundingClientRect();
+            if (rect.bottom > window.innerHeight - 100) {
+                window.scrollBy({
+                    top: 100,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+        let speed = 15;
+
+        if (character === "\n") speed = 180;
+        if (character === "." || character === "!") speed = 100;
+        if (character === ",") speed = 65;
+
+        setTimeout(type, speed);
+    }
+
+    type();
+}
+
+function floatingWordBurst(x, y) {
+    const words = ["potchi", "pepeyt", "pepeyt hart", "chocopao", "siopao", "madame potch", "dih buh rah", "dihbuhrah peyt", "pepeyt kulit"];
+    const bubble = document.createElement("div");
+    bubble.className = "click-star";
+    bubble.textContent = words[Math.floor(Math.random() * words.length)];
+    bubble.style.left = x + "px";
+    bubble.style.top = y + "px";
+    bubble.style.fontSize = "12px";
+    bubble.style.fontWeight = "700";
+    bubble.style.color = "#d9ecff";
+    bubble.style.textShadow = "0 0 10px rgba(125,200,255,0.8)";
+    bubble.style.display = "flex";
+    bubble.style.alignItems = "center";
+    bubble.style.justifyContent = "center";
+    bubble.style.padding = "6px 10px";
+    bubble.style.borderRadius = "999px";
+    bubble.style.background = "rgba(18, 44, 78, 0.6)";
+    bubble.style.border = "1px solid rgba(173,216,255,0.45)";
+
+    document.body.appendChild(bubble);
+
+    const driftX = (Math.random() * 120 - 60);
+    const driftY = -(Math.random() * 120 + 30);
+    const rotation = (Math.random() * 30 - 15);
+
+    bubble.animate([
+        {
+            transform: "translate(-50%,-50%) scale(.7) rotate(0deg)",
+            opacity: 1
+        },
+        {
+            transform: `translate(calc(-50% + ${driftX}px), calc(-50% + ${driftY}px)) scale(1.15) rotate(${rotation}deg)`,
+            opacity: 1
+        },
+        {
+            transform: `translate(calc(-50% + ${driftX + 20}px), calc(-50% + ${driftY - 40}px)) scale(1.4) rotate(${rotation + 12}deg)`,
+            opacity: 0
+        }
+    ], {
+        duration: 1400,
+        easing: "ease-out"
+    });
+
+    setTimeout(() => bubble.remove(), 1400);
+}
+
+function starBurst() {
+    const symbols = ["✨", "💙", "⭐", "🌟", "🌙"];
+
+    for (let i = 0; i < 35; i++) {
+        const particle = document.createElement("div");
+        particle.className = "click-star";
+        particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+        particle.style.left = "50%";
+        particle.style.top = "50%";
+
+        const x = Math.random() * 500 - 250;
+        const y = Math.random() * 500 - 250;
+
+        particle.animate([
+            {
+                transform: "translate(-50%,-50%) scale(.5)",
+                opacity: 1
+            },
+            {
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1.6)`,
+                opacity: 0
+            }
+        ], {
+            duration: 1500,
+            easing: "ease-out"
+        });
+
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 1600);
+    }
+}
+
+document.addEventListener("click", function(e) {
+    if (e.target.closest("button") || e.target.closest("input")) return;
+
+    if (document.getElementById("letterScreen") && !document.getElementById("letterScreen").classList.contains("hidden")) {
+        floatingWordBurst(e.clientX, e.clientY);
+        return;
+    }
+
+    const sparkle = document.createElement("div");
+    sparkle.className = "click-star";
+    sparkle.textContent = ["✨", "💙", "⭐"][Math.floor(Math.random() * 3)];
+
+    sparkle.style.left = e.clientX + "px";
+    sparkle.style.top = e.clientY + "px";
+
+    document.body.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 1200);
+});
+</script>
+
+</body>
+</html>
